@@ -1,0 +1,14 @@
+S = QQ[x,y,z,w]
+R = S/ideal(x*y-z*w)
+needsPackage "ReesAlgebra"
+reduceHilbert hilbertSeries R --q(1)=2
+mm = ideal(x,y,z,w)
+multiplicity mm --gives 2
+
+needsPackage "RandomIdeals"
+J = randomElementsFromIdeal({1,1,1},mm)
+mm^2 == J*(mm^1)
+length comodule J 
+
+--
+restart

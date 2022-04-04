@@ -1,0 +1,76 @@
+--Nauty examples
+restart
+needsPackage "Nauty"
+
+v = 10;
+S = QQ[x_1..x_v];
+mm = ideal vars S;
+Trees = generateGraphs(S,v-1,OnlyConnected=>true);
+for i from 0 to length Trees - 1 list isLogConcave (hvec (edgeIdeal(Trees_i)))
+Jls = for i from 0 to length Trees -1 list edgeIdeal(Trees_i)+(ideal(vars S))^[2]
+sls = for i from 0 to length Jls - 1 list (Jls_i):mm
+dls = for i from 0 to length sls -1 list apply((sls_i)_*, j-> first degree(j))
+
+someGraphs = generateGraphs(S,OnlyConnected=>true)
+for i from 0 to length someGraphs - 1 list isLogConcave (hvec (edgeIdeal(someGraphs_i)+mm^[2]))
+
+
+res (edgeIdeal(Trees_5)+mm^[2])
+
+--hvec
+hvec = I -> (
+    ls   = {};
+    i    = 0;
+    next = hilbertFunction(i,ring(I)/I);
+    while not (next == 0) do (
+	ls = append(ls,next);
+	i  = i+1;
+	next = hilbertFunction(i,ring(I)/I);
+	);
+    ls
+    )
+
+pvec = I -> (
+    F = res I;
+    for i from 0 to length F - 1 list rank(F#i)
+    )
+
+--hpoly
+hpoly = I -> (
+    numerator hilbertSeries I
+    )
+
+--Checks if peak unimodal
+isUnimodal = S -> (
+    l := #S-1;
+    m := max(select(1..l, i -> S#(i-1)<S#i));
+    M := min(select(1..l, i->S#(i-1)>S#i));
+    f := M-m;
+    if f<0 then all(f, j -> S#(m+1)==S#(m+f)) else true
+    )
+
+--Checks if log concave
+isLogConcave = S -> (
+    all(1..#S-2,i -> i*i>= (i-1)*(i+1))
+    )
+
+--Turns an integer sequence to a polynomial
+seqToPoly = seq -> (
+    R := ZZ[x];
+    l := #seq-1;
+    sum for i from 0 to l list seq_i*x^i   	
+    )
+
+
+roots hvec(J)
+
+
+S = QQ[a,b,c]
+mm = ideal(vars S)
+I1 = mm^[2]+ideal(a*b,b*c,c*a)
+I2 = mm^[2]
+I3 = mm^[2]+ideal(a*b)
+hvec(I1)
+hvec(I2)
+hvec(I3)
+

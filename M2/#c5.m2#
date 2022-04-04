@@ -1,0 +1,17 @@
+restart
+V = ZZ/3[vars (0..50)]
+X = genericSymmetricMatrix(V,V_0,3)
+I = minors(2,X)
+mingens I
+codim I --gives 3, answers height
+A = ideal(genericMatrix(V,V_6,4,6)*transpose(mingens I))
+J = A:I
+
+--
+restart
+V = QQ[vars (0..12)]
+I = ideal(a*b, b*c, c*d)
+alpha = genericMatrix(V,V_4,3,3)*transpose(gens I)
+
+R = QQ[x,y,z,w]
+primaryDecomposition ideal(x*y,x*w,y*z,z*w)

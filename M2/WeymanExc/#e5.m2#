@@ -1,0 +1,90 @@
+-- Exercise Session 5
+
+Q = QQ[x,y,z]
+
+M = matrix{{x,y,z,0}, {0,x,y,z}}
+
+I = minors(2,M)
+
+betti res I
+
+hvec = I -> (
+    ls   = {};
+    i    = 0;
+    next = hilbertFunction(i,ring(I)/I);
+    while not (next == 0) do (
+	ls = append(ls,next);
+	i  = i+1;
+	next = hilbertFunction(i,ring(I)/I);
+	);
+    ls
+    )
+
+hvecN = (I,n) -> for i from 0 to n list hilbertFunction(i,ring(I)/I)
+
+
+hvec(I,5)
+
+s1=3
+s2=3
+F1=random(s1,Q)
+F2=random(s2,Q)
+
+I=ideal fromDual matrix{{F1,F2}}
+ 
+betti res I
+res I
+
+hvec(I,3)
+
+needsPackage "TorAlgebra"
+torAlgClass (Q/I)
+
+--I is a homogeneous ideal in a polynomial ring Q such that Q/I is artinian
+socdeg = (I) -> (
+    	i = 0;
+    	while not (hilbertFunction(i,ring(I)/I) == 0) do i=i+1;
+	i	
+    )
+
+hvecCI = I -> (
+    d1 = (degree(I_0))_0;
+    d2 = (degree(I_1))_1;
+    d3 = (degree(I_2))_2;
+    s = d1+d2+d3-3;
+    hvec(I,s)
+    )
+
+--This can be improved so don't have to compute ideal... just do it directly since CI
+hvecLink = (I,d1,d2,d3) -> (
+    hvecCI(ideal(x^d1,y^d2,z^d3)) - reverse hvecN(I,d1+d2+d3-3);
+    )
+
+--Exercise 5.4
+I = ideal(x*z-y*z,x*y,x^2-y^2,z^3)
+X = ideal(z^3, x*y, x*z-y*z+x^2-y^2)
+J = X:I
+hvec(J)
+
+--Exercise 5.5
+I = ideal(y^3+x*y*z+z^3,x*y^2+x^2*z+y^2*z+x*z^2+y*z^2,x^2*y+y*z^2+z^3,x^3+x^2*z+z^3,x*z^3)
+codim I
+hvec(I)
+X = ideal(I_0,I_1,I_2+I_3)
+codim X
+J = X:I
+codim J
+Y = ideal(J_0,J_1,J_2+J_3)
+codim Y
+hvec(Y)
+K = Y:J
+codim K
+Z = ideal(K_0,K_1,K_2+K_3)
+codim Z
+L = Z:K
+
+(z*x,y*x,x*z,x^10000)
+
+(z*x)
+
+(z*x + m*

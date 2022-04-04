@@ -1,0 +1,92 @@
+restart
+needsPackage "TorAlgebra"
+
+Q = QQ[x,y,z]
+I = ideal(x^2,y^2,z^2,y*z)
+
+torAlgClass(Q/I)
+torAlgData(Q/I)
+torAlgDataList( Q/I , {"m","n","PoincareSeries"} )
+torAlgDataPrint( Q/I , {"m","n","PoincareSeries"} )
+isCI(Q/I)
+isGorenstein(Q/I)
+isGolod(Q/I)
+
+P = QQ[a..h]
+X = genericMatrix(P,a,2,4)
+J = minors(2,X)
+torAlgData (P/J)
+isGolod (P/J)
+
+needsPackage "DGAlgebras"
+torAlgClass (Q/I)
+K = koszulComplexDGA (Q/I)
+A = homologyAlgebra K
+
+basis(0,A)
+basis(1,A)
+
+--Notice in degree two, four of the basis elements are 
+--products of basis elements in degree one... i.e.,
+--it shows you the small part that has the algebra structure
+basis(2,A)
+basis(3,A)
+
+Q = QQ[x,y]
+torAlgClass (Q/ideal(x^2,y^2))
+torAlgClass (Q/ideal(x^2,x*y))
+
+Q = QQ[w,x,y,z]
+torAlgClass (Q/ideal(w^2,x^2,y^2,z^2))
+I = ideal (x^2,y^2,z^2,x*w,y*w,z*w,w^3-x*y*z)
+isGorenstein (Q/I)
+torAlgClass (Q/I)
+
+restart
+--Excerise 2.1
+Q = QQ[x,y]
+I = ideal(x*x,x*y)
+res I
+So we can 
+
+restart
+--Exercise 2.1
+--For this one compute the algebra structure by hand using
+--the DG-algebra structure. To get the second matrix, 
+
+--Exercise 2.2/2.3
+--Can compute the koszul homology using depth sensitivity
+
+needsPackage "TorAlgebra"
+needsPackage "DGAlgebras"
+Q = QQ[x,y,z]
+I = ideal(x*y,y*z,x^3, x^2*z, x*z^2-y^3,z^3)
+torAlgClass(Q/I)
+res I
+K = koszulComplexDGA(Q/I)
+A = homologyAlgebra K
+HH K
+prune HH_1 K
+prune HH_2 K
+basis(1,A)
+basis(2,A)
+basis(3,A)
+A
+--
+describe A
+
+R = Q/I
+K = koszul vars(R)
+A = HH K
+mingens A_1
+mingens A_2
+
+
+Q  = QQ[x,y,z]
+I = ideal(x*y,y*z,x^3, x^2*z, x*z^2-y^3,z^3)
+KC = koszul matrix{{x,y,z}}
+F  = res I
+KFC = KC ** F
+length KFC
+for i from 0 to length KFC list prune HH_i KFC
+prune HH KFC

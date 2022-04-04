@@ -1,0 +1,58 @@
+restart
+A   = QQ[x_12,x_13,x_14,x_23,x_24,x_34,
+    y_12,y_13,y_14,y_23,y_24,y_34,
+    z_123,z_124,z_134,z_234,t,
+    Degrees=>{16:{1},{2}}]
+a   = x_12*x_34-x_13*x_24+x_14*x_23
+b   = x_12*y_34-x_13*y_24+x_14*y_23+x_34*y_12-x_24*y_13+x_23*y_14
+c   = y_12*y_34-y_13*y_24+y_14*y_23
+u1  = -x_12*z_134+x_13*z_124-x_14*z_123
+u2  = -x_12*z_234+x_23*z_124-x_24*z_123
+u3  = -x_13*z_234+x_23*z_134-x_34*z_123
+u4  = -x_14*z_234+x_24*z_134-x_34*z_124
+v1  = -y_12*z_134+y_13*z_124-y_14*z_123
+v2  = -y_12*z_234+y_23*z_124-y_24*z_123
+v3  = -y_13*z_234+y_23*z_134-y_34*z_123
+v4  = -y_14*z_234+y_24*z_134-y_34*z_124
+
+M   = matrix{{b+t,2*a},{-2*c,-b+t},{-v1,-u1},{v2,u2},{v3,u3},{-v4,-u4}}
+d3  = map(A^{6:-5},A^{2:-7},M)
+
+
+
+AA   = QQ[s_12,s_13,s_14,s_15,s_23,s_24,s_25,s_34,s_35,s_45,T]
+MM   = substitute(M,{z_234=>s_12,z_134=>s_13,z_124=>s_14,z_123=>s_15,
+	x_34=>0,x_24=>0,x_23=>0,x_14=>0,x_13=>0,x_12=>1,
+	y_34=>s_23,y_24=>s_24,y_23=>s_25,y_14=>s_34,y_13=>s_35,y_12=>s_45,t=>s_23-2*s_15})
+
+MM   = mutableMatrix(MM)
+rowMult(MM,1,1/2)
+
+bettiSeq = F -> (
+    	
+    )
+
+isSymmetric = seq -> (
+    	
+    )
+
+isGor = F -> (
+    	isSymmetric(bettiSeq(F)) 
+    )
+
+checkPfaffians = (M,rows,cols) -> (
+    	I := ideal(submatrix(M,rows,cols));
+	F := res I;
+	if isGor F then I == ideal(F.dd_3) else false
+    )
+
+checkPfaffians(MM,{1,2,3,4,5},{0})
+
+checkAnneBrown = I -> (
+    	
+    )
+
+I = ideal(submatrix(M,{1,2,3,4,5},{0}))
+codim I
+F = res I
+I == ideal(F.dd_3)
